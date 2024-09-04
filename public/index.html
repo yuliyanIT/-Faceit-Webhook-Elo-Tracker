@@ -1,70 +1,213 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FACEIT ELO Tracker - Marulqta</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: transparent;
-            color: rgb(255, 255, 255);
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> Circular Progress Bar </title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+        form {
+            display: block;
         }
-        #player-name {
-            display: none;
-            font-size: 24px;
-            margin-bottom: 10px;
+         
+        /* Easing in SVG */
+        #svg-container {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
         }
-        #elo-change {
-            display: none;
-            font-size: 48px;
-            font-weight: bold;
-            transition: all 0.5s ease;
+         
+        #svg-container.visible {
+            opacity: 1;
         }
-        #current-elo {
-            display: none;
-            font-size: 20px;
-            margin-top: 10px;
+         
+        circle#c1 {
+            transition: stroke-dashoffset ease-in-out 1s;
         }
-    </style>
-</head>
-<body>
-    <div id="player-name">Marulqta</div>
-    <div id="elo-change">+0</div>
-    <div id="current-elo">Current ELO: --</div>
-    <script>
-        const ws = new WebSocket(`wss://${window.location.host}`);
-        const eloChangeElement = document.getElementById('elo-change');
-        const currentEloElement = document.getElementById('current-elo');
-        const playerNameElement = document.getElementById('player-name');
+         
+        #eloDiff {
+            transition: opacity 1s ease-in-out;
+        }
+         
+        #eloText {
+            transition: transform 0.5s ease-in-out;
+        }
+        </style>                    
+    </head>
+    <body>
+        <div id="svg-container">
+            <!-- Your SVG content here -->
+            <svg height="90vh" viewBox="0 0 100 110" fill="none">
+                <defs>
+                    <mask id="m1">
+                        <circle transform="rotate(135)" stroke="white" stroke-width="13" r="35" stroke-dasharray="270 360" pathLength="360"></circle>
+                    </mask>
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <g transform="translate(50 50)">
+                    <circle stroke="#000" stroke-width="52" r="20"></circle>
+                    <g mask="url(#m1)">
+                        <circle stroke="#999" stroke-width="9" stroke-dasharray="" r="33"></circle>
+                    </g>
+                    <g transform="rotate(135)">
+                        <circle id="c1" stroke="red" stroke-width="9" r="33" stroke-dasharray="97.5 134" pathLength="130" stroke-dashoffset="80"></circle>
+                    </g>
+                    <text id="t1" font-family="Play" font-size="35" font-weight="700" text-anchor="middle" dominant-baseline="middle" fill="red">10</text>
+                </g>
+                <g transform="translate(7.5 78)">
+                    <rect fill="#000" height="22%" width="85%" rx="5"></rect>
+                    <text id="eloText" transform="translate(25 18.5)" font-family="Play" font-size="20" font-weight="700" text-anchor="middle" fill="#fff">2500</text>
+                    <text filter="url(#glow)" id="eloDiff" transform="translate(66 18.5)" font-family="Play" font-size="20" font-weight="700" text-anchor="middle" fill="rgb(82 233 13)">25</text>
+                </g>
+            </svg>
+        </div>
+        <script>
+const c1 = document.getElementById('c1');
+const t1 = document.getElementById('t1');
+const eloText = document.getElementById('eloText');
+const eloDiff = document.getElementById('eloDiff');
+
+const svgContainer = document.getElementById('svg-container');
+const ws = new WebSocket(`wss://${window.location.host}`);
+
+document.forms.form01.val.addEventListener('change', e => {
+  c1.setAttribute('stroke-dashoffset', 100 - e.target.valueAsNumber);
+  t1.textContent = 10;
+});
+ 
+function handleWin() {
+    // Show SVG with easing in
+    svgContainer.classList.add('visible');
+    // Logic for handling win button press
+    console.log('Win button pressed');
+    // Add your win logic here
+    let positiveProgressOffset = 80;
+    let eloDiffValue = parseInt(eloDiff.textContent, 10);
+    let eloTextValue = parseInt(eloText.textContent, 10);
+ 
+    let progressStartValue = 0,    
+        progressEndValue = 100,    
+        speed = 25;
+ 
+        eloDiff.textContent = `+${eloDiff.textContent}`;
+        eloDiff.setAttribute('fill', 'rgb(82 233 13)');
+ 
+    let progress = setInterval(() => {
+        progressStartValue++;
+        
+        if (progressStartValue == 30) {
+            // Fade out eloDiff
+            eloDiff.style.opacity = '0';
+            
+            // Remove eloDiff after the transition
+            setTimeout(() => {
+                eloDiff.remove();
+                eloText.setAttribute('transform', 'translate(43 18.5)');
+ 
+                // Smoothly count up the difference
+                let targetValue = eloTextValue + eloDiffValue;
+                let increment = eloDiffValue / 50; // Adjust the divisor for smoothness
+                let countUpInterval = setInterval(() => {
+                    eloTextValue += increment;
+                    eloText.textContent = Math.round(eloTextValue);
+                    if (eloTextValue >= targetValue) {
+                        clearInterval(countUpInterval);
+                        eloText.textContent = targetValue; // Ensure it ends exactly at targetValue
+                    }
+                }, 20); // Adjust the interval for smoothness
+            }, 1000); // Match the duration of the CSS transition
+        }
+    
+        if (progressStartValue == 60) {
+            c1.setAttribute('stroke-dashoffset', 80 - positiveProgressOffset);
+        }
+        
+        if (progressStartValue == progressEndValue) {
+            clearInterval(progress);
+            setTimeout(() => {
+                svgContainer.classList.remove('visible');
+            }, 2500);
+        }    
+    }, speed);
+}
+ 
+function handleLose() {
+    // Show SVG with easing in
+    svgContainer.classList.add('visible');
+    // Logic for handling lose button press
+    console.log('Lose button pressed');
+    // Add your lose logic here
+    let negativeProgressOffset = 13;
+    let eloDiffValue = parseInt(eloDiff.textContent, 10);
+    let eloTextValue = parseInt(eloText.textContent, 10);
+ 
+    let progressStartValue = 0,    
+        progressEndValue = 100,    
+        speed = 25;
+ 
+        eloDiff.textContent = `-${eloDiff.textContent}`;
+        eloDiff.setAttribute('fill', 'rgb(254 30 5)');
+ 
+    let progress = setInterval(() => {
+        progressStartValue++;
+        
+        if (progressStartValue == 30) {
+            // Fade out eloDiff
+            eloDiff.style.opacity = '0';
+            
+            // Remove eloDiff after the transition
+            setTimeout(() => {
+                eloDiff.remove();
+                eloText.setAttribute('transform', 'translate(43 18.5)');
+ 
+                // Smoothly count down the difference
+                let targetValue = eloTextValue - eloDiffValue;
+                let decrement = eloDiffValue / 50; // Adjust the divisor for smoothness
+                let countDownInterval = setInterval(() => {
+                    eloTextValue -= decrement;
+                    eloText.textContent = Math.round(eloTextValue);
+                    if (eloTextValue <= targetValue) {
+                        clearInterval(countDownInterval);
+                        eloText.textContent = targetValue; // Ensure it ends exactly at targetValue
+                    }
+                }, 20); // Adjust the interval for smoothness
+            }, 1000); // Match the duration of the CSS transition
+        }
+    
+        if (progressStartValue == 60) {
+            c1.setAttribute('stroke-dashoffset', 80 + negativeProgressOffset);
+        }
+        
+        if (progressStartValue == progressEndValue) {
+            clearInterval(progress);
+            setTimeout(() => {
+                svgContainer.classList.remove('visible');
+            }, 2500);
+        }    
+    }, speed);
+}
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            eloChangeElement.textContent = (data.eloChange > 0 ? '+' : '') + data.eloChange;
-            eloChangeElement.style.color = data.eloChange > 0 ? 'lime' : 'red';
-            currentEloElement.textContent = `Current ELO: ${data.newElo}`;
-            eloChangeElement.style.display = "block";
-            currentEloElement.style.display = "block";
-            playerNameElement.style.display = "block";
-
-            // Add animation
-            eloChangeElement.style.transform = 'scale(1.2)';
-            setTimeout(() => {
-                eloChangeElement.style.display = "none";
-                currentEloElement.style.display = "none";
-                playerNameElement.style.display = "none";
-                eloChangeElement.style.transform = 'scale(1)';
-            }, 5000);
+            eloDiff.textContent = data.eloChange;
+            eloText.textContent = data.oldElo;
+            if(data.direction && data.direction == "up"){
+                handleWin();
+            } else {
+                handleLose();
+            }
         };
         ws.onclose = () => {
             console.log("Websocket disconnected. Reloading page...");
             setTimeout(()=>location.reload(),5000);
         }
-    </script>
-</body>
+        </script>
+    </body>
 </html>
