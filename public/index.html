@@ -77,11 +77,6 @@ const eloDiff = document.getElementById('eloDiff');
 
 const svgContainer = document.getElementById('svg-container');
 const ws = new WebSocket(`wss://${window.location.host}`);
-
-document.forms.form01.val.addEventListener('change', e => {
-  c1.setAttribute('stroke-dashoffset', 100 - e.target.valueAsNumber);
-  t1.textContent = 10;
-});
  
 function handleWin() {
     // Show SVG with easing in
