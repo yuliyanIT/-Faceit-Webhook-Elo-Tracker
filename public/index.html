@@ -14,18 +14,21 @@
             height: 100vh;
             margin: 0;
             background-color: transparent;
-            color: rgb(0, 0, 0);
+            color: rgb(255, 255, 255);
         }
         #player-name {
+            display: none;
             font-size: 24px;
             margin-bottom: 10px;
         }
         #elo-change {
+            display: none;
             font-size: 48px;
             font-weight: bold;
             transition: all 0.5s ease;
         }
         #current-elo {
+            display: none;
             font-size: 20px;
             margin-top: 10px;
         }
@@ -39,16 +42,22 @@
         const ws = new WebSocket(`wss://${window.location.host}`);
         const eloChangeElement = document.getElementById('elo-change');
         const currentEloElement = document.getElementById('current-elo');
-        
+        const playerNameElement = document.getElementById('player-name');
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
             eloChangeElement.textContent = (data.eloChange > 0 ? '+' : '') + data.eloChange;
             eloChangeElement.style.color = data.eloChange > 0 ? 'lime' : 'red';
             currentEloElement.textContent = `Current ELO: ${data.newElo}`;
-            
+            eloChangeElement.style.display = "block";
+            currentEloElement.style.display = "block";
+            playerNameElement.style.display = "block";
+
             // Add animation
             eloChangeElement.style.transform = 'scale(1.2)';
             setTimeout(() => {
+                eloChangeElement.style.display = "none";
+                currentEloElement.style.display = "none";
+                playerNameElement.style.display = "none";
                 eloChangeElement.style.transform = 'scale(1)';
             }, 500);
         };
