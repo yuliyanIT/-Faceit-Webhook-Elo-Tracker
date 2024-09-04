@@ -129,10 +129,20 @@ function handleWin() {
             clearInterval(progress);
             setTimeout(() => {
                 svgContainer.classList.remove('visible');
+                location.reload();
             }, 2500);
         }    
     }, speed);
 }
+
+    async function handleWinWithReload() {
+                await new Promise((resolve) => {
+                    handleWin();
+                    setTimeout(resolve, 2500 + 1000 + 100); // Total duration of all animations
+                });
+                location.reload();
+        }
+
  
 function handleLose() {
     // Show SVG with easing in
@@ -185,18 +195,29 @@ function handleLose() {
             clearInterval(progress);
             setTimeout(() => {
                 svgContainer.classList.remove('visible');
+                location.reload();
             }, 2500);
         }    
     }, speed);
+    
 }
+
+    async function handleLoseWithReload() {
+            await new Promise((resolve) => {
+                handleLose();
+                setTimeout(resolve, 2500 + 1000 + 100); // Total duration of all animations
+            });
+            location.reload();
+    }
+
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
             eloDiff.textContent = data.eloChange;
             eloText.textContent = data.oldElo;
             if(data.direction && data.direction == "up"){
-                handleWin();
+                handleWinWithReload();
             } else {
-                handleLose();
+                handleLoseWithReload();
             }
         };
         ws.onclose = () => {
