@@ -60,7 +60,7 @@ app.post('/webhook', async (req, res) => {
       });
     }
   }
-  
+  console.log(matchData);
   res.sendStatus(200);
 });
  
