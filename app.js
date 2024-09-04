@@ -45,7 +45,7 @@ app.post('/webhook', async (req, res) => {
   // Verify that our player was in the match
   const oldElo = currentElo;
   let newElo = await getPlayerElo();
-  newElo = newElo + 25;
+  newElo = newElo - 25;
   let eloChange;
   let direction;
     
