@@ -80,6 +80,7 @@ const svgContainer = document.getElementById('svg-container');
 const ws = new WebSocket(`wss://${window.location.host}`);
  
 function handleWin() {
+    let winSound = new Audio('./sounds/win.mp3');
     // Show SVG with easing in
     svgContainer.classList.add('visible');
     // Logic for handling win button press
@@ -95,7 +96,7 @@ function handleWin() {
  
         eloDiff.textContent = `+${eloDiff.textContent}`;
         eloDiff.setAttribute('fill', 'rgb(82 233 13)');
- 
+        winSound.play();
     let progress = setInterval(() => {
         progressStartValue++;
         
@@ -146,6 +147,7 @@ function handleWin() {
 
  
 function handleLose() {
+    let loseSound = new Audio('./sounds/loss.mp3');
     // Show SVG with easing in
     svgContainer.classList.add('visible');
     // Logic for handling lose button press
@@ -161,7 +163,7 @@ function handleLose() {
  
         eloDiff.textContent = `-${eloDiff.textContent}`;
         eloDiff.setAttribute('fill', 'rgb(254 30 5)');
- 
+        loseSound.play();
     let progress = setInterval(() => {
         progressStartValue++;
         
