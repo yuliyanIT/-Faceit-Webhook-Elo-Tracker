@@ -40,6 +40,7 @@ getPlayerElo().then(elo => {
 // Webhook endpoint
 app.post('/webhook', async (req, res) => {
   const matchData = req.body;
+ 
   console.log(matchData);
   // Verify that our player was in the match
   const playerInMatch = matchData.payload.players.some(player => player.nickname === PLAYER_ID);
@@ -60,7 +61,7 @@ app.post('/webhook', async (req, res) => {
       });
     }
   }
-  console.log(matchData);
+  res.send(matchData);
   res.sendStatus(200);
 });
  
