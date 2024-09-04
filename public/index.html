@@ -36,7 +36,7 @@
     <div id="elo-change">+0</div>
     <div id="current-elo">Current ELO: --</div>
     <script>
-        const ws = new WebSocket('ws://faceit-webhook-elo-tracker.onrender.com:10000');
+        const ws = new WebSocket(`wss://${window.location.host}`);
         const eloChangeElement = document.getElementById('elo-change');
         const currentEloElement = document.getElementById('current-elo');
         
@@ -52,6 +52,10 @@
                 eloChangeElement.style.transform = 'scale(1)';
             }, 500);
         };
+        ws.onclose = () => {
+            console.log("Websocket disconnected. Reloading page...");
+            setTimeout(()=>location.reload(),5000);
+        }
     </script>
 </body>
 </html>
