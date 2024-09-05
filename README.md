@@ -18,6 +18,7 @@ This project implements a circular progress bar that visually represents changes
 2. **Install dependencies:**
    Navigate to the project directory and install the required Node.js packages:
    ```npm install
+   npm install
 3.**Set up FACEIT API:**
   Create an account on FACEIT and get your API key.
   Replace the FACEIT_API_KEY and PLAYER_ID in server.js with your actual FACEIT API key and the ID of the player you want to track.
