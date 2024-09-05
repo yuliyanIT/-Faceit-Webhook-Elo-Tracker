@@ -20,22 +20,22 @@ This project implements a circular progress bar that visually represents changes
    ```npm install
    npm install
 3.**Set up FACEIT API:**
-  Create an account on FACEIT and get your API key.
-  Replace the FACEIT_API_KEY and PLAYER_ID in server.js with your actual FACEIT API key and the ID of the player you want to track.
+  - Create an account on FACEIT and get your API key.
+  - Replace the FACEIT_API_KEY and PLAYER_ID in server.js with your actual FACEIT API key and the ID of the player you want to track.
 
 
   ## Usage
-Client Interface: Open the URL where the server is running. The widget will display the player's current ELO.
-Real-Time Updates: The progress bar will update in real-time based on ELO changes fetched from the FACEIT API.
-Testing: You can test the win/loss animations by sending POST requests to the /webhook endpoint with match data or manually triggering events in the WebSocket connection.
+- Client Interface: Open the URL where the server is running. The widget will display the player's current ELO.
+- Real-Time Updates: The progress bar will update in real-time based on ELO changes fetched from the FACEIT API.
+- Testing: You can test the win/loss animations by sending POST requests to the /webhook endpoint with match data or manually triggering events in the WebSocket connection.
 
 ## API Integration
-The server integrates with the FACEIT API to fetch the player's ELO.
-Match results are sent via a webhook, which triggers updates to the ELO progress bar.
-Webhook Endpoint: /webhook accepts match data and calculates ELO changes.
+- The server integrates with the FACEIT API to fetch the player's ELO.
+- Match results are sent via a webhook, which triggers updates to the ELO progress bar.
+- Webhook Endpoint: /webhook accepts match data and calculates ELO changes.
 
 ## Technologies
-HTML/CSS/JavaScript: Frontend for displaying the circular progress bar and animations.
-Node.js: Backend server to handle WebSocket connections and fetch data from the FACEIT API.
-WebSocket: For real-time updates between the server and the client.
-FACEIT API: Used to retrieve the player's ELO and match data.
+- **HTML/CSS/JavaScript**: Frontend for displaying the circular progress bar and animations.
+- **Node.js**: Backend server to handle WebSocket connections and fetch data from the FACEIT API.
+- **WebSocket**: For real-time updates between the server and the client.
+- **FACEIT API**: Used to retrieve the player's ELO and match data.
