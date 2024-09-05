@@ -1,4 +1,4 @@
-# Circular Progress Bar with ELO Tracking
+# Faceit Streamlabs Widget
 
 This project implements a circular progress bar that visually represents changes in a player's ELO rating using data from the FACEIT API. It displays an interactive circular progress bar that increases or decreases depending on whether the player wins or loses a match. The project also includes real-time updates via WebSocket.
 
