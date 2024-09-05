@@ -14,7 +14,7 @@ This project implements a circular progress bar that visually represents changes
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/circular-progress-elo.git
+   git clone https://github.com/your-username/-Faceit-Webhook-Elo-Tracker.git
 2. **Install dependencies:**
    Navigate to the project directory and install the required Node.js packages:
    ```npm install
