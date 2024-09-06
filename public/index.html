@@ -83,6 +83,7 @@ const ws = new WebSocket(`wss://${window.location.host}`);
  
 function handleWin() {
     let winSound = new Audio('./sounds/win.mp3');
+        winSound.volume = 0.4;
     // Show SVG with easing in
     svgContainer.classList.add('visible');
     // Logic for handling win button press
@@ -150,6 +151,7 @@ function handleWin() {
  
 function handleLose() {
     let loseSound = new Audio('./sounds/loss.mp3');
+        LoseSound.volume = 0.4;
     // Show SVG with easing in
     svgContainer.classList.add('visible');
     // Logic for handling lose button press
